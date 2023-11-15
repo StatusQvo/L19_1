@@ -1,40 +1,14 @@
-const POSTS_URL = "https://jsonplaceholder.typicode.com/post33s";
-let isLoading = false;
+const TODOS_URL = "https://jsonplaceholder.typicode.com/todos";
 
-const createNewPost = async () => {
-   try {
-    isLoading = true;
-    const fetchedURL = await fetch(POSTS_URL, {
-    method: "POST"
-  })
-  const resultJS = await fetchedURL.json()
-  console.log("result",resultJS)
-}
-catch (error) {
-console.log("error",error)
-}
-finally {
-  isLoading = false; 
-}
+const getTodosByIds = async (ids) => {
+  try {
+  const requests = ids.map((id) => fetch(`${TODOS_URL}/${id}`));
+  const promises = await Promise.all(requests);
+  const allResults = await Promise.all(promises.map((data)=>data.json()));
+  console.log("allResults",allResults);
+  } catch (error) {
+  console.error(error);
+  }   
 };
 
-createNewPost()
-
-
-// const createNewPost = () => {
-//   isLoading = true;
-//   fetch(POSTS_URL, {
-//     method: "POST"
-//   })
-//     .then((response) => response.json())
-//     .then((result) => {
-//       console.log("result", result);
-//     })
-//     .catch((error) => {
-//       console.log("error", error);
-//     })
-//     .finally(() => {
-//       isLoading = false;
-//     });
-// };
-// createNewPost();
+getTodosByIds([43, 21, 55, 100, 10]);
